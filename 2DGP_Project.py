@@ -49,7 +49,7 @@ def render_world():
     update_canvas()
 
 
-open_canvas(800, 600)
+open_canvas(1000, 600)
 reset_world()
 
 while running:

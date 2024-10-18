@@ -6,7 +6,7 @@ class UI:
         self.image = load_image('UI.png')
 
     def draw(self):
-        self.image.draw(130, 560, 300, 300)
+        self.image.draw(156, 543, 313, 114)
 
     def update(self):
         pass

@@ -12,7 +12,7 @@ class Player:
         self.state = 's'
 
     def update(self):
-        if 0 <= self.x + (self.dir_x * 5) <= 800:
+        if 0 <= self.x + (self.dir_x * 5) <= 1000:
             self.x += self.dir_x * 5
         if 0 <= self.y + (self.dir_y * 5) <= 330:
             self.y += self.dir_y * 5
