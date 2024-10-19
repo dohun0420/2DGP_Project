@@ -3,9 +3,21 @@ from Map import Map
 from Player import Player
 from UI import UI
 
+class Store:
+    def __init__(self):
+        self.image = load_image('store_test.png')
+
+    def draw(self):
+        self.image.draw(500, 300, 1000, 600)
+
+    def update(self):
+        pass
+
+
 def handle_events():
     global running
     global player
+    global store_mode
 
     events = get_events()
     for event in events:
@@ -14,7 +26,10 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE:
                 running = False
-        player.handle_event(event)
+            elif event.key == SDLK_p:  # Press 'p' to toggle store
+                store_mode = not store_mode
+        if not store_mode:
+            player.handle_event(event)
 
 
 def reset_world():
@@ -23,8 +38,11 @@ def reset_world():
     global world
     global player
     global ui
+    global store
+    global store_mode
 
     running = True
+    store_mode = False
     world = []
 
     map = Map()
@@ -36,6 +54,7 @@ def reset_world():
     ui = UI()
     world.append(ui)
 
+    store = Store()
 
 def update_world():
     for o in world:
@@ -44,8 +63,12 @@ def update_world():
 
 def render_world():
     clear_canvas()
-    for o in world:
-        o.draw()
+    if store_mode:
+        store.draw()
+    else:
+
+        for o in world:
+            o.draw()
     update_canvas()
 
 
