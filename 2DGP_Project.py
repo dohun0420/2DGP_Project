@@ -89,7 +89,6 @@ def update_world():
 
     if space_mode:
         if time.time() - space_pressed_time >= 5:
-            # 70% 확률로 금 증가
             if random.random() < 0.7:
                 gold.increase()
                 happy = Happy(player.x, player.y + 40)
@@ -118,6 +117,7 @@ def render_world():
     clear_canvas()
     if store_mode:
         store.draw()
+        gold.draw_count_only()
     else:
         for o in world:
             o.draw()
