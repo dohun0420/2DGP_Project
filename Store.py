@@ -11,13 +11,3 @@ class Store:
     def update(self):
         pass
 
-
-class Selection:
-    def __init__(self):
-        self.image = load_image('Selection.png')
-
-    def draw(self):
-        self.image.draw(100, 300)
-
-    def update(self):
-        pass

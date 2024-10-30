@@ -10,6 +10,42 @@ from Sad import Sad
 from Store import Store
 from UI import UI
 
+class Selection:
+    def __init__(self):
+        self.x, self.y = 116, 354
+        self.dir_x = 0
+        self.dir_y = 0
+        self.frame = 0
+        self.image = load_image('Selection.png')
+
+    def update(self):
+        if 0 <= self.x + self.dir_x <= 1000:
+            self.x += self.dir_x
+        if 0 <= self.y + self.dir_y <= 600:
+            self.y += self.dir_y
+
+    def handle_event(self, event):
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_d:
+                self.dir_x = 100
+            elif event.key == SDLK_a:
+                self.dir_x = -100
+            elif event.key == SDLK_w:
+                self.dir_y = 100
+            elif event.key == SDLK_s:
+                self.dir_y = -100
+        elif event.type == SDL_KEYUP:
+            if event.key in (SDLK_d, SDLK_a):
+                self.dir_x = 0
+            elif event.key in (SDLK_w, SDLK_s):
+                self.dir_y = 0
+
+        self.frame = (self.frame + 1)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 614, 0, 614, 211, self.x + self.dir_x, self.y + self.dir_y, 750, 170)
+
+
 def handle_events():
     global running
     global player
@@ -53,6 +89,7 @@ def reset_world():
     global sad
     global result_mode
     global result_time
+    global selection
 
     running = True
     store_mode = False
@@ -75,6 +112,8 @@ def reset_world():
     world.append(gold)
 
     store = Store()
+
+    selection = Selection()
 
     dig_ani = None
     happy = None
@@ -118,6 +157,7 @@ def render_world():
     if store_mode:
         store.draw()
         gold.draw_count_only()
+        selection.draw()
     else:
         for o in world:
             o.draw()
