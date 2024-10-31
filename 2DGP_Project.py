@@ -9,41 +9,7 @@ from Player import Player
 from Sad import Sad
 from Store import Store
 from UI import UI
-
-class Selection:
-    def __init__(self):
-        self.x, self.y = 116, 354
-        self.dir_x = 0
-        self.dir_y = 0
-        self.frame = 0
-        self.image = load_image('Selection.png')
-
-    def update(self):
-        if 0 <= self.x + self.dir_x <= 1000:
-            self.x += self.dir_x
-        if 0 <= self.y + self.dir_y <= 600:
-            self.y += self.dir_y
-
-    def handle_event(self, event):
-        if event.type == SDL_KEYDOWN:
-            if event.key == SDLK_d:
-                self.dir_x = 100
-            elif event.key == SDLK_a:
-                self.dir_x = -100
-            elif event.key == SDLK_w:
-                self.dir_y = 100
-            elif event.key == SDLK_s:
-                self.dir_y = -100
-        elif event.type == SDL_KEYUP:
-            if event.key in (SDLK_d, SDLK_a):
-                self.dir_x = 0
-            elif event.key in (SDLK_w, SDLK_s):
-                self.dir_y = 0
-
-        self.frame = (self.frame + 1)
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 614, 0, 614, 211, self.x + self.dir_x, self.y + self.dir_y, 750, 170)
+from Selection import Selection
 
 
 def handle_events():
@@ -52,6 +18,7 @@ def handle_events():
     global store_mode
     global space_pressed_time
     global space_mode
+    global selection
 
     events = get_events()
     for event in events:
@@ -66,8 +33,18 @@ def handle_events():
                 space_pressed_time = time.time()
                 space_mode = True
                 start_dig_animation(player.x, player.y + 40)
+            elif store_mode:
+                if event.key == SDLK_w:
+                    selection.move(0, 190)
+                elif event.key == SDLK_s:
+                    selection.move(0, -190)
+                elif event.key == SDLK_a:
+                    selection.move(-500, 0)
+                elif event.key == SDLK_d:
+                    selection.move(500, 0)
         if not store_mode and not space_mode:
             player.handle_event(event)
+
 
 def start_dig_animation(x, y):
     global dig_ani
