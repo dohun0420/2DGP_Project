@@ -19,7 +19,7 @@ class Player:
             self.y = new_y
 
         if self.dir_x != 0 or self.dir_y != 0:
-            self.frame = (self.frame + 1) % 3  # Update frame cyclically
+            self.frame = (self.frame + 1) % 3
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
@@ -48,9 +48,9 @@ class Player:
     def draw(self):
         if self.state == 's':
             self.image.clip_draw(self.frame * 33, 130, 33, 56, self.x, self.y, 90, 80)
-        elif self.state == 'w':  # Moving up
+        elif self.state == 'w':
             self.image.clip_draw(self.frame * 33, 86, 33, 46, self.x, self.y, 90, 90)
-        elif self.state == 'd':  # Moving right
+        elif self.state == 'd':
             self.image.clip_draw(self.frame * 33, 45, 33, 48, self.x, self.y, 90, 100)
-        elif self.state == 'a':  # Moving left
+        elif self.state == 'a':
             self.image.clip_draw(self.frame * 33, 0, 33, 57, self.x, self.y, 90, 100)

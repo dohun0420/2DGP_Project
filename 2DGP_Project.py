@@ -4,43 +4,13 @@ import time
 from Dig_ani import Dig_ani
 from Gold import Gold
 from Happy import Happy
+from Items import Items
 from Map import Map
 from Player import Player
 from Sad import Sad
 from Store import Store
 from UI import UI
 from Selection import Selection
-
-class Items:
-    def __init__(self):
-        self.x, self.y = 55, 543
-        self.own_item = 0
-        self.frame = 0
-        self.image = None
-        self.update_image()
-
-    def update_image(self):
-        if self.own_item == 1:
-            self.image = load_image('Glove.png')
-        elif self.own_item == 2:
-            self.image = load_image('Shovel.png')
-        elif self.own_item == 3:
-            self.image = load_image('Pickaxe.png')
-        elif self.own_item == 4:
-            self.image = load_image('Drill.png')
-        else:
-            self.image = None
-
-    def set_item(self, item_number):
-        self.own_item = item_number
-        self.update_image()
-
-    def update(self):
-        pass
-
-    def draw(self):
-        if self.image:
-            self.image.clip_draw(self.frame, 0, 980, 980, self.x, self.y, 60, 60)
 
 
 def handle_events():
@@ -84,25 +54,25 @@ def buy_item():
     global gold, items, purchased_items
 
     if selection.x == 250 and selection.y == 354 and not purchased_items[1]:
-        gold.count -= 5
-        gold.count = max(gold.count, 0)
-        items.set_item(1)
-        purchased_items[1] = True
+        if gold.count >= 5:
+            gold.count -= 5
+            items.set_item(1)
+            purchased_items[1] = True
     elif selection.x == 750 and selection.y == 354 and not purchased_items[3]:
-        gold.count -= 12
-        gold.count = max(gold.count, 0)
-        items.set_item(3)
-        purchased_items[3] = True
+        if gold.count >= 12:
+            gold.count -= 12
+            items.set_item(3)
+            purchased_items[3] = True
     elif selection.x == 250 and selection.y == 164 and not purchased_items[2]:
-        gold.count -= 7
-        gold.count = max(gold.count, 0)
-        items.set_item(2)
-        purchased_items[2] = True
+        if gold.count >= 7:
+            gold.count -= 7
+            items.set_item(2)
+            purchased_items[2] = True
     elif selection.x == 750 and selection.y == 164 and not purchased_items[4]:
-        gold.count -= 20
-        gold.count = max(gold.count, 0)
-        items.set_item(4)
-        purchased_items[4] = True
+        if gold.count >= 20:
+            gold.count -= 20
+            items.set_item(4)
+            purchased_items[4] = True
 
 
 def start_dig_animation(x, y):
