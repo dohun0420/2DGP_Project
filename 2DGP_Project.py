@@ -51,29 +51,32 @@ def handle_store_key(event):
 
 
 def buy_item():
-    global gold, items, purchased_items
+    global gold, items, purchased_items, dig_time
 
     if selection.x == 250 and selection.y == 354 and not purchased_items[1]:
         if gold.count >= 5:
             gold.count -= 5
             items.set_item(1)
             purchased_items[1] = True
+            dig_time = 4
     elif selection.x == 750 and selection.y == 354 and not purchased_items[3]:
         if gold.count >= 12:
             gold.count -= 12
             items.set_item(3)
             purchased_items[3] = True
+            dig_time = 2
     elif selection.x == 250 and selection.y == 164 and not purchased_items[2]:
         if gold.count >= 7:
             gold.count -= 7
             items.set_item(2)
             purchased_items[2] = True
+            dig_time = 3
     elif selection.x == 750 and selection.y == 164 and not purchased_items[4]:
         if gold.count >= 20:
             gold.count -= 20
             items.set_item(4)
             purchased_items[4] = True
-
+            dig_time = 1
 
 def start_dig_animation(x, y):
     global dig_ani
@@ -82,7 +85,7 @@ def start_dig_animation(x, y):
 
 def reset_world():
     global running, map, world, player, ui, gold, store, store_mode, space_mode, space_pressed_time
-    global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items
+    global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items, dig_time
 
     running = True
     store_mode = False
@@ -116,13 +119,14 @@ def reset_world():
     sad = None
 
     purchased_items = [False] * 5
+    dig_time = 5
 
 
 def update_world():
-    global space_mode, space_pressed_time, result_mode, result_time, happy, sad
+    global space_mode, space_pressed_time, result_mode, result_time, happy, sad, dig_time
 
     if space_mode and not store_mode:
-        if time.time() - space_pressed_time >= 5:
+        if time.time() - space_pressed_time >= dig_time:
             if random.random() < 0.7:
                 gold.increase()
                 happy = Happy(player.x, player.y + 40)
