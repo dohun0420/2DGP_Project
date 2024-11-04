@@ -1,6 +1,5 @@
 from pico2d import *
-import random
-import time
+import random, time
 from Dig_ani import Dig_ani
 from Gold import Gold
 from Happy import Happy
@@ -26,9 +25,12 @@ def handle_events():
             elif event.key == SDLK_p:
                 store_mode = not store_mode
             elif event.key == SDLK_SPACE and not space_mode:
-                space_pressed_time = time.time()
-                space_mode = True
-                start_dig_animation(player.x, player.y + 40)
+                if store_mode:
+                    buy_item()
+                else:
+                    space_pressed_time = time.time()
+                    space_mode = True
+                    start_dig_animation(player.x, player.y + 40)
             elif store_mode:
                 handle_store_key(event)
         if not store_mode and not space_mode:

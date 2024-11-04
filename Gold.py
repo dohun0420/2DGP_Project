@@ -17,8 +17,7 @@ class Gold:
         self.font.draw(120, 510, f'X {self.count}', (0, 0, 0))
 
     def increase(self):
-        if random.random() < 0.7:
-            self.count += 1
+        self.count += 1
 
     def update(self):
         pass
