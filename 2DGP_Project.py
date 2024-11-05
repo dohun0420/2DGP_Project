@@ -55,30 +55,35 @@ def handle_store_key(event):
 def buy_item():
     global gold, items, purchased_items, dig_time
 
+    item_prices = [0, 5, 7, 12, 20]
+
+    current_item_price = min([price for i, price in enumerate(item_prices) if purchased_items[i]], default=0)
+
     if selection.x == 250 and selection.y == 354 and not purchased_items[1]:
-        if gold.count >= 5:
+        if gold.count >= 5 and 5 > current_item_price:
             gold.count -= 5
             items.set_item(1)
             purchased_items[1] = True
             dig_time = 4
     elif selection.x == 750 and selection.y == 354 and not purchased_items[3]:
-        if gold.count >= 12:
+        if gold.count >= 12 and 12 > current_item_price:
             gold.count -= 12
             items.set_item(3)
             purchased_items[3] = True
             dig_time = 2
     elif selection.x == 250 and selection.y == 164 and not purchased_items[2]:
-        if gold.count >= 7:
+        if gold.count >= 7 and 7 > current_item_price:
             gold.count -= 7
             items.set_item(2)
             purchased_items[2] = True
             dig_time = 3
     elif selection.x == 750 and selection.y == 164 and not purchased_items[4]:
-        if gold.count >= 20:
+        if gold.count >= 20 and 20 > current_item_price:
             gold.count -= 20
             items.set_item(4)
             purchased_items[4] = True
             dig_time = 1
+
 
 def start_dig_animation(x, y):
     global dig_ani
@@ -121,7 +126,7 @@ def reset_world():
     sad = None
 
     purchased_items = [False] * 5
-    dig_time = 5
+    dig_time = 0.1
 
 
 def update_world():
