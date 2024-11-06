@@ -12,6 +12,15 @@ from UI import UI
 from Selection import Selection
 
 
+class GoldSpot:
+    def __init__(self):
+        self.x, self.y = 0, 0
+        self.image = load_image('GoldSpot.png')
+    def update(self):
+        pass
+    def draw(self):
+        self.image.draw(360, 360, 50, 50)
+
 def handle_events():
     global running, player, store_mode, space_pressed_time, space_mode, selection
 
