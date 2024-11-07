@@ -19,7 +19,7 @@ class GoldSpot:
     def update(self):
         pass
     def draw(self):
-        self.image.draw(360, 360, 50, 50)
+        self.image.draw(random.randint(0, 1000), random.randint(0, 330), 25, 25)
 
 def handle_events():
     global running, player, store_mode, space_pressed_time, space_mode, selection
@@ -101,7 +101,7 @@ def start_dig_animation(x, y):
 
 def reset_world():
     global running, map, world, player, ui, gold, store, store_mode, space_mode, space_pressed_time
-    global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items, dig_time
+    global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items, dig_time, goldspot
 
     running = True
     store_mode = False
@@ -113,6 +113,9 @@ def reset_world():
 
     map = Map()
     world.append(map)
+
+    goldspot = GoldSpot()
+    world.append(goldspot)
 
     player = Player()
     world.append(player)
