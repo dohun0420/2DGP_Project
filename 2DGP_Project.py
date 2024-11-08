@@ -14,12 +14,20 @@ from Selection import Selection
 
 class GoldSpot:
     def __init__(self):
-        self.x, self.y = 0, 0
+        self.x, self.y = random.randint(0, 1000), random.randint(0, 300)
+        self.frame = 0
+        self.frame_delay = 0.3
+        self.last_update_time = time.time()
         self.image = load_image('GoldSpot.png')
+
     def update(self):
-        pass
+        current_time = time.time()
+        if current_time - self.last_update_time >= self.frame_delay:
+            self.frame = (self.frame + 1) % 4
+            self.last_update_time = current_time
+
     def draw(self):
-        self.image.draw(random.randint(0, 1000), random.randint(0, 330), 25, 25)
+        self.image.clip_draw(self.frame * 190, 0, 190, 244, self.x, self.y, 25, 25)
 
 def handle_events():
     global running, player, store_mode, space_pressed_time, space_mode, selection
@@ -114,8 +122,8 @@ def reset_world():
     map = Map()
     world.append(map)
 
-    goldspot = GoldSpot()
-    world.append(goldspot)
+    goldspot = [GoldSpot() for _ in range(10)]
+    world.extend(goldspot)
 
     player = Player()
     world.append(player)
@@ -138,7 +146,7 @@ def reset_world():
     sad = None
 
     purchased_items = [False] * 5
-    dig_time = 0.1
+    dig_time = 5
 
 
 def update_world():
@@ -146,15 +154,20 @@ def update_world():
 
     if space_mode and not store_mode:
         if time.time() - space_pressed_time >= dig_time:
-            if random.random() < 0.7:
-                gold.increase()
-                happy = Happy(player.x, player.y + 40)
-                result_time = time.time()
-                result_mode = 'happy'
-            else:
+            gold_collected = False
+            for spot in goldspot:
+                distance = ((player.x - spot.x) ** 2 + (player.y - spot.y) ** 2) ** 0.5
+                if distance <= 50:
+                    gold.increase()
+                    happy = Happy(player.x, player.y + 40)
+                    gold_collected = True
+                    break
+
+            if not gold_collected:
                 sad = Sad(player.x, player.y + 40)
-                result_time = time.time()
-                result_mode = 'sad'
+
+            result_time = time.time()
+            result_mode = 'happy' if gold_collected else 'sad'
             space_mode = False
         else:
             if dig_ani:
