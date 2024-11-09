@@ -155,11 +155,13 @@ def update_world():
     if space_mode and not store_mode:
         if time.time() - space_pressed_time >= dig_time:
             gold_collected = False
-            for spot in goldspot:
+            for spot in goldspot[:]:
                 distance = ((player.x - spot.x) ** 2 + (player.y - spot.y) ** 2) ** 0.5
                 if distance <= 50:
                     gold.increase()
                     happy = Happy(player.x, player.y + 40)
+                    goldspot.remove(spot)
+                    world.remove(spot)
                     gold_collected = True
                     break
 
@@ -169,19 +171,22 @@ def update_world():
             result_time = time.time()
             result_mode = 'happy' if gold_collected else 'sad'
             space_mode = False
-        else:
-            if dig_ani:
-                dig_ani.update()
 
-    if not space_mode:
-        for o in world:
-            o.update()
+    for o in world:
+        o.update()
+
+    if space_mode and dig_ani:
+        dig_ani.update()
 
     if result_mode:
         if time.time() - result_time >= 0.5:
             result_mode = False
             happy = None
             sad = None
+
+    if not goldspot:
+        goldspot.extend([GoldSpot() for _ in range(10)])
+        world.extend(goldspot)
 
 
 def render_world():
