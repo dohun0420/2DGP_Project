@@ -1,7 +1,8 @@
 from pico2d import *
-import random, time
+import time
 from Dig_ani import Dig_ani
 from Gold import Gold
+from GoldSpot import GoldSpot
 from Happy import Happy
 from Items import Items
 from Map import Map
@@ -11,23 +12,6 @@ from Store import Store
 from UI import UI
 from Selection import Selection
 
-
-class GoldSpot:
-    def __init__(self):
-        self.x, self.y = random.randint(0, 1000), random.randint(0, 300)
-        self.frame = 0
-        self.frame_delay = 0.3
-        self.last_update_time = time.time()
-        self.image = load_image('GoldSpot.png')
-
-    def update(self):
-        current_time = time.time()
-        if current_time - self.last_update_time >= self.frame_delay:
-            self.frame = (self.frame + 1) % 4
-            self.last_update_time = current_time
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 190, 0, 190, 244, self.x, self.y, 25, 25)
 
 def handle_events():
     global running, player, store_mode, space_pressed_time, space_mode, selection
