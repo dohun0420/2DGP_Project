@@ -134,7 +134,7 @@ def reset_world():
 
 
 def update_world():
-    global space_mode, space_pressed_time, result_mode, result_time, happy, sad, dig_time
+    global space_mode, space_pressed_time, result_mode, result_time, happy, sad, dig_time, player
 
     if space_mode and not store_mode:
         if time.time() - space_pressed_time >= dig_time:
@@ -171,6 +171,9 @@ def update_world():
     if not goldspot:
         goldspot.extend([GoldSpot() for _ in range(10)])
         world.extend(goldspot)
+        if player in world:
+            world.remove(player)
+        world.append(player)
 
 
 def render_world():
