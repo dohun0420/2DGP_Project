@@ -20,3 +20,5 @@ class GoldSpot:
 
     def draw(self):
         self.image.clip_draw(self.frame * 190, 0, 190, 244, self.x, self.y, 25, 25)
+
+

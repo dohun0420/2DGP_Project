@@ -14,7 +14,7 @@ from Selection import Selection
 
 
 def handle_events():
-    global running, player, store_mode, space_pressed_time, space_mode, selection
+    global running, player, store_mode, space_pressed_time, space_mode, selection, goldspot
 
     events = get_events()
     for event in events:
@@ -25,6 +25,16 @@ def handle_events():
                 running = False
             elif event.key == SDLK_p:
                 store_mode = not store_mode
+                if store_mode:
+                    for spot in goldspot:
+                        world.remove(spot)
+                    goldspot = [GoldSpot() for _ in range(10)]
+                    world.extend(goldspot)
+                else:
+                    for spot in goldspot:
+                        world.remove(spot)
+                    goldspot = [GoldSpot() for _ in range(10)]
+                    world.extend(goldspot)
             elif event.key == SDLK_SPACE and not space_mode:
                 if store_mode:
                     buy_item()
