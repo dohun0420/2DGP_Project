@@ -6,7 +6,7 @@ from pico2d import load_image
 
 class GoldSpot:
     def __init__(self):
-        self.x, self.y = random.randint(0, 1000), random.randint(0, 300)
+        self.x, self.y = random.randint(10, 1000), random.randint(10, 300)
         self.frame = 0
         self.frame_delay = 0.3
         self.last_update_time = time.time()

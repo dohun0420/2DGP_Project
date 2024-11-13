@@ -35,6 +35,9 @@ def handle_events():
                         world.remove(spot)
                     goldspot = [GoldSpot() for _ in range(10)]
                     world.extend(goldspot)
+                    if player in world:
+                        world.remove(player)
+                    world.append(player)
             elif event.key == SDLK_SPACE and not space_mode:
                 if store_mode:
                     buy_item()
