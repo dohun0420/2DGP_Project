@@ -13,6 +13,15 @@ from UI import UI
 from Selection import Selection
 
 
+class Timer():
+    def __init__(self):
+        pass
+    def update(self):
+        pass
+    def draw(self):
+        pass
+
+
 def handle_events():
     global running, player, store_mode, space_pressed_time, space_mode, selection, goldspot
 
