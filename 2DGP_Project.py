@@ -15,11 +15,14 @@ from Selection import Selection
 
 class Timer():
     def __init__(self):
-        pass
+        self.x, self.y = 900, 560
+        self.image = load_image('Timer.png')
+        self.font = load_font('arial.ttf', 24)
     def update(self):
         pass
     def draw(self):
-        pass
+        self.image.draw(self.x, self.y, 100, 100)
+        # self.font.draw(910, 550, f'X {self.time}', (255, 255, 255))
 
 
 def handle_events():
@@ -115,7 +118,7 @@ def start_dig_animation(x, y):
 
 def reset_world():
     global running, map, world, player, ui, gold, store, store_mode, space_mode, space_pressed_time
-    global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items, dig_time, goldspot
+    global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items, dig_time, goldspot, timer
 
     running = True
     store_mode = False
@@ -146,6 +149,9 @@ def reset_world():
 
     items = Items()
     world.append(items)
+
+    #timer = Timer()
+    #world.append(timer)
 
     dig_ani = None
     happy = None
