@@ -21,8 +21,8 @@ class Timer():
     def update(self):
         pass
     def draw(self):
-        self.image.draw(self.x, self.y, 100, 100)
-        # self.font.draw(910, 550, f'X {self.time}', (255, 255, 255))
+        #self.image.draw(self.x, self.y, 100, 100)
+        #self.font.draw(self.x + 10, self.y, f'X {get_time():02d}', (255, 255, 255))
 
 
 def handle_events():
