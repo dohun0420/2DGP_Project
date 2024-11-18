@@ -21,8 +21,8 @@ class Timer():
     def update(self):
         pass
     def draw(self):
-        #self.image.draw(self.x, self.y, 100, 100)
-        #self.font.draw(self.x + 10, self.y, f'X {get_time():02d}', (255, 255, 255))
+        self.image.draw(self.x, self.y, 100, 100)
+        self.font.draw(self.x + 25, self.y, f'{180 - get_time():.0f}', (255, 255, 255))
 
 
 def handle_events():
@@ -150,8 +150,8 @@ def reset_world():
     items = Items()
     world.append(items)
 
-    #timer = Timer()
-    #world.append(timer)
+    timer = Timer()
+    world.append(timer)
 
     dig_ani = None
     happy = None
