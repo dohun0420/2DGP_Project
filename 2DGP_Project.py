@@ -210,6 +210,7 @@ def render_world():
         store.draw()
         gold.draw_count_only()
         selection.draw()
+        timer.draw()
     else:
         for o in world:
             o.draw()
