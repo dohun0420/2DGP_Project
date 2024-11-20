@@ -18,11 +18,28 @@ class Timer():
         self.x, self.y = 900, 560
         self.image = load_image('Timer.png')
         self.font = load_font('arial.ttf', 24)
+        self.start_time = get_time()
+        self.paused = False
+        self.paused_time = 0
+
     def update(self):
-        pass
+        global store_mode
+        if store_mode:
+            if not self.paused:
+                self.paused = True
+                self.paused_time = get_time() - self.start_time
+        else:
+            if self.paused:
+                self.paused = False
+                self.start_time = get_time() - self.paused_time
+
     def draw(self):
         self.image.draw(self.x, self.y, 100, 100)
-        self.font.draw(self.x + 25, self.y, f'{180 - get_time():.0f}', (255, 255, 255))
+        if not self.paused:
+            remaining_time = max(0, 180 - (get_time() - self.start_time))
+        else:
+            remaining_time = max(0, 180 - self.paused_time)
+        self.font.draw(self.x + 25, self.y, f'{remaining_time:.0f}', (255, 255, 255))
 
 
 def handle_events():
