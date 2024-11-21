@@ -17,7 +17,7 @@ class Timer():
     def __init__(self):
         self.x, self.y = 900, 560
         self.image = load_image('Timer.png')
-        self.font = load_font('arial.ttf', 24)
+        self.font = load_font('arial.ttf', 30)
         self.start_time = get_time()
         self.paused = False
         self.paused_time = 0
