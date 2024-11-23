@@ -251,3 +251,5 @@ while running:
     delay(0.01)
 
 close_canvas()
+
+#버그없음
