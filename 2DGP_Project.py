@@ -12,6 +12,16 @@ from Store import Store
 from UI import UI
 from Selection import Selection
 
+class Ending():
+    def __init__(self):
+        self.x, self.y = 500, 300
+        self.image = load_image('Ending.png')
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 1000, 600)
 
 class Timer():
     def __init__(self):
