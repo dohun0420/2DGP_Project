@@ -16,6 +16,7 @@ class Ending():
     def __init__(self):
         self.x, self.y = 500, 300
         self.image = load_image('Ending.png')
+        self.font = load_font('arial.ttf', 24)
 
     def update(self):
         pass
