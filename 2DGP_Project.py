@@ -23,6 +23,7 @@ class Ending():
 
     def draw(self):
         self.image.draw(self.x, self.y, 1000, 600)
+        self.font.draw(500, 300, '.', (255, 255, 255)) #임시
 
 class Timer():
     def __init__(self):
