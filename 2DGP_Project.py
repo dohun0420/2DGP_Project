@@ -23,7 +23,14 @@ class Ending():
 
     def draw(self):
         self.image.draw(self.x, self.y, 1000, 600)
-        self.font.draw(500, 300, '.', (255, 255, 255)) #임시
+        self.font.draw(740, 260, f'{gold.count},000,000', (255, 255, 255))
+        self.font.draw(430, 40, '[Press ESC]', (0, 0, 0))
+
+    def handle_event(self, event):
+        global ending_mode, running
+        if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            ending_mode = False
+            running = False
 
 class Timer():
     def __init__(self):
@@ -33,9 +40,10 @@ class Timer():
         self.start_time = get_time()
         self.paused = False
         self.paused_time = 0
+        self.time_over = False
 
     def update(self):
-        global store_mode
+        global store_mode, running, ending_mode
         if store_mode:
             if not self.paused:
                 self.paused = True
@@ -45,51 +53,65 @@ class Timer():
                 self.paused = False
                 self.start_time = get_time() - self.paused_time
 
+        if not self.paused:
+            remaining_time = max(0, 5 - (get_time() - self.start_time))
+        else:
+            remaining_time = max(0, 5 - self.paused_time)
+
+        if remaining_time <= 0 and not self.time_over:
+            self.time_over = True
+            ending_mode = True
+            running = False
+
     def draw(self):
         self.image.draw(self.x, self.y, 100, 100)
         if not self.paused:
-            remaining_time = max(0, 180 - (get_time() - self.start_time))
+            remaining_time = max(0, 5 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 180 - self.paused_time)
+            remaining_time = max(0, 5 - self.paused_time)
         self.font.draw(self.x + 25, self.y, f'{remaining_time:.0f}', (255, 255, 255))
 
 
 def handle_events():
-    global running, player, store_mode, space_pressed_time, space_mode, selection, goldspot
+    global running, ending_mode, player, store_mode, space_pressed_time, space_mode, selection, goldspot
 
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             running = False
-        elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_ESCAPE:
-                running = False
-            elif event.key == SDLK_p:
-                store_mode = not store_mode
-                if store_mode:
-                    for spot in goldspot:
-                        world.remove(spot)
-                    goldspot = [GoldSpot() for _ in range(10)]
-                    world.extend(goldspot)
-                else:
-                    for spot in goldspot:
-                        world.remove(spot)
-                    goldspot = [GoldSpot() for _ in range(10)]
-                    world.extend(goldspot)
-                    if player in world:
-                        world.remove(player)
-                    world.append(player)
-            elif event.key == SDLK_SPACE and not space_mode:
-                if store_mode:
-                    buy_item()
-                else:
-                    space_pressed_time = time.time()
-                    space_mode = True
-                    start_dig_animation(player.x, player.y + 40)
-            elif store_mode:
-                handle_store_key(event)
-        if not store_mode and not space_mode:
-            player.handle_event(event)
+            ending_mode = False
+        elif ending_mode:  # 엔딩 모드일 때는 엔딩의 이벤트 처리로 연결
+            ending.handle_event(event)
+        else:
+            if event.type == SDL_KEYDOWN:
+                if event.key == SDLK_ESCAPE:
+                    running = False
+                elif event.key == SDLK_p:
+                    store_mode = not store_mode
+                    if store_mode:
+                        for spot in goldspot:
+                            world.remove(spot)
+                        goldspot = [GoldSpot() for _ in range(10)]
+                        world.extend(goldspot)
+                    else:
+                        for spot in goldspot:
+                            world.remove(spot)
+                        goldspot = [GoldSpot() for _ in range(10)]
+                        world.extend(goldspot)
+                        if player in world:
+                            world.remove(player)
+                        world.append(player)
+                elif event.key == SDLK_SPACE and not space_mode:
+                    if store_mode:
+                        buy_item()
+                    else:
+                        space_pressed_time = time.time()
+                        space_mode = True
+                        start_dig_animation(player.x, player.y + 40)
+                elif store_mode:
+                    handle_store_key(event)
+            if not store_mode and not space_mode:
+                player.handle_event(event)
 
 
 def handle_store_key(event):
@@ -148,6 +170,7 @@ def start_dig_animation(x, y):
 def reset_world():
     global running, map, world, player, ui, gold, store, store_mode, space_mode, space_pressed_time
     global dig_ani, happy, sad, result_mode, result_time, selection, items, purchased_items, dig_time, goldspot, timer
+    global ending_mode
 
     running = True
     store_mode = False
@@ -155,6 +178,7 @@ def reset_world():
     space_pressed_time = 0
     result_mode = False
     result_time = 0
+    ending_mode = False
     world = []
 
     map = Map()
@@ -262,6 +286,13 @@ while running:
     render_world()
     delay(0.01)
 
-close_canvas()
+if ending_mode:
+    ending = Ending()
+    while ending_mode:
+        clear_canvas()
+        ending.draw()
+        update_canvas()
+        handle_events()
+        delay(0.01)
 
-#버그없음
+close_canvas()
