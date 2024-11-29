@@ -5,12 +5,15 @@ from pico2d import load_image
 
 
 class GoldSpot:
+    image = None
+
     def __init__(self):
         self.x, self.y = random.randint(10, 1000), random.randint(10, 300)
         self.frame = 0
         self.frame_delay = 0.3
         self.last_update_time = time.time()
-        self.image = load_image('GoldSpot.png')
+        if GoldSpot.image == None:
+            GoldSpot.image = load_image('GoldSpot.png')
 
     def update(self):
         current_time = time.time()
