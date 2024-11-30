@@ -1,7 +1,5 @@
 from pico2d import *
 import time
-
-import game_world
 from Dig_ani import Dig_ani
 from Gold import Gold
 from GoldSpot import GoldSpot
@@ -56,9 +54,9 @@ class Timer():
                 self.start_time = get_time() - self.paused_time
 
         if not self.paused:
-            remaining_time = max(0, 1 - (get_time() - self.start_time))
+            remaining_time = max(0, 180 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 1 - self.paused_time)
+            remaining_time = max(0, 180 - self.paused_time)
 
         if remaining_time <= 0 and not self.time_over:
             self.time_over = True
@@ -68,7 +66,7 @@ class Timer():
     def draw(self):
         self.image.draw(self.x, self.y, 100, 100)
         if not self.paused:
-            remaining_time = max(0, 1 - (get_time() - self.start_time))
+            remaining_time = max(0, 180 - (get_time() - self.start_time))
         else:
             remaining_time = max(0, 5 - self.paused_time)
         self.font.draw(self.x + 25, self.y, f'{remaining_time:.0f}', (255, 255, 255))
@@ -184,19 +182,19 @@ def reset_world():
     world = []
 
     map = Map()
-    game_world.add_object(map, 0)
+    world.append(map)
 
     goldspot = [GoldSpot() for _ in range(10)]
-    game_world.add_object(goldspot, 1)
+    world.extend(goldspot)
 
     player = Player()
-    game_world.add_object(player, 2)
+    world.append(player)
 
     ui = UI()
-    game_world.add_object(ui, 2)
+    world.append(ui)
 
     gold = Gold()
-    game_world.add_object(gold, 3)
+    world.append(gold)
 
     store = Store()
 
