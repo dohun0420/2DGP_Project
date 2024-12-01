@@ -12,6 +12,7 @@ from Store import Store
 from UI import UI
 from Selection import Selection
 
+
 class Ending():
     def __init__(self):
         self.x, self.y = 500, 300
