@@ -1,5 +1,5 @@
 from pico2d import *
-import time
+import time, random
 from Dig_ani import Dig_ani
 from Gold import Gold
 from GoldSpot import GoldSpot
@@ -69,19 +69,19 @@ class Timer():
         if not self.paused:
             remaining_time = max(0, 180 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 5 - self.paused_time)
+            remaining_time = max(0, 180 - self.paused_time)
         self.font.draw(self.x + 25, self.y, f'{remaining_time:.0f}', (255, 255, 255))
 
 
 def handle_events():
-    global running, ending_mode, player, store_mode, space_pressed_time, space_mode, selection, goldspot
+    global running, ending_mode, player, store_mode, space_pressed_time, space_mode, selection, goldspot, map, store
 
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             running = False
             ending_mode = False
-        elif ending_mode:  # 엔딩 모드일 때는 엔딩의 이벤트 처리로 연결
+        elif ending_mode:
             ending.handle_event(event)
         else:
             if event.type == SDL_KEYDOWN:
@@ -90,14 +90,21 @@ def handle_events():
                 elif event.key == SDLK_p:
                     store_mode = not store_mode
                     if store_mode:
+                        # BGM 전환
+                        map.bgm.stop()
+                        store.bgm.play()
+
                         for spot in goldspot:
                             world.remove(spot)
-                        goldspot = [GoldSpot() for _ in range(10)]
+                        goldspot = [GoldSpot() for _ in range(random.randint(10, 20))]
                         world.extend(goldspot)
                     else:
+                        store.bgm.stop()
+                        map.bgm.play()
+
                         for spot in goldspot:
                             world.remove(spot)
-                        goldspot = [GoldSpot() for _ in range(10)]
+                        goldspot = [GoldSpot() for _ in range(random.randint(10, 20))]
                         world.extend(goldspot)
                         if player in world:
                             world.remove(player)
@@ -185,7 +192,7 @@ def reset_world():
     map = Map()
     world.append(map)
 
-    goldspot = [GoldSpot() for _ in range(10)]
+    goldspot = [GoldSpot() for _ in range(random.randint(10, 20))]
     world.extend(goldspot)
 
     player = Player()
@@ -213,6 +220,8 @@ def reset_world():
 
     purchased_items = [False] * 5
     dig_time = 5
+
+    map.bgm.play()
 
 
 def update_world():
