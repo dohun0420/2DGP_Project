@@ -18,6 +18,9 @@ class Ending():
         self.x, self.y = 500, 300
         self.image = load_image('Ending.png')
         self.font = load_font('arial.ttf', 24)
+        self.bgm = load_music("Store.mp3")
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
 
     def update(self):
         pass
@@ -55,9 +58,9 @@ class Timer():
                 self.start_time = get_time() - self.paused_time
 
         if not self.paused:
-            remaining_time = max(0, 180 - (get_time() - self.start_time))
+            remaining_time = max(0, 10 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 180 - self.paused_time)
+            remaining_time = max(0, 10 - self.paused_time)
 
         if remaining_time <= 0 and not self.time_over:
             self.time_over = True
@@ -90,7 +93,6 @@ def handle_events():
                 elif event.key == SDLK_p:
                     store_mode = not store_mode
                     if store_mode:
-                        # BGM 전환
                         map.bgm.stop()
                         store.bgm.play()
 
@@ -220,6 +222,7 @@ def reset_world():
 
     purchased_items = [False] * 5
     dig_time = 5
+
 
     map.bgm.play()
 
