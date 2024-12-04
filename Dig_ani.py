@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, load_wav
 
 
 class Dig_ani:
@@ -7,6 +7,8 @@ class Dig_ani:
         self.frame = 0
         self.x, self.y = x, y
         self.frame_time = 0
+        self.bgm2 = load_wav('Digdone.wav')
+        self.bgm2.set_volume(20)
 
     def draw(self):
         self.image.clip_draw(self.frame * 25 , 0, 25, 25, self.x, self.y, 25, 25)

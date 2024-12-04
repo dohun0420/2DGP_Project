@@ -58,9 +58,9 @@ class Timer():
                 self.start_time = get_time() - self.paused_time
 
         if not self.paused:
-            remaining_time = max(0, 10 - (get_time() - self.start_time))
+            remaining_time = max(0, 1 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 10 - self.paused_time)
+            remaining_time = max(0, 1 - self.paused_time)
 
         if remaining_time <= 0 and not self.time_over:
             self.time_over = True
@@ -94,7 +94,7 @@ def handle_events():
                     store_mode = not store_mode
                     if store_mode:
                         map.bgm.stop()
-                        store.bgm.play()
+                        store.bgm.repeat_play()
 
                         for spot in goldspot:
                             world.remove(spot)
@@ -140,7 +140,7 @@ def handle_store_key(event):
 
 
 def buy_item():
-    global gold, items, purchased_items, dig_time
+    global gold, items, purchased_items, dig_time, dig_ani
 
     item_prices = [0, 5, 7, 12, 20]
 
@@ -224,7 +224,7 @@ def reset_world():
     dig_time = 5
 
 
-    map.bgm.play()
+    map.bgm.repeat_play()
 
 
 def update_world():
@@ -241,6 +241,8 @@ def update_world():
                     goldspot.remove(spot)
                     world.remove(spot)
                     gold_collected = True
+                    if dig_ani:
+                        dig_ani.bgm2.play()
                     break
 
             if not gold_collected:
