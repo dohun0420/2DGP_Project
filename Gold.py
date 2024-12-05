@@ -1,5 +1,3 @@
-import random
-
 from pico2d import load_image, load_font
 
 

@@ -9,6 +9,7 @@ class Player:
         self.dir_y = 0
         self.image = load_image('Player.png')
         self.state = 's'
+        self.frame_timer = 0
 
     def update(self):
         new_x = self.x + (self.dir_x * 5)
@@ -19,7 +20,9 @@ class Player:
             self.y = new_y
 
         if self.dir_x != 0 or self.dir_y != 0:
-            self.frame = (self.frame + 1) % 3
+            self.frame_timer += 1
+            if self.frame_timer % 10 == 0:
+                self.frame = (self.frame + 1) % 3
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:

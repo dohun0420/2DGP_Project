@@ -12,13 +12,12 @@ from Store import Store
 from UI import UI
 from Selection import Selection
 
-
 class Ending():
     def __init__(self):
         self.x, self.y = 500, 300
         self.image = load_image('Ending.png')
         self.font = load_font('arial.ttf', 24)
-        self.bgm = load_music("Store.mp3")
+        self.bgm = load_music("Ending.mp3")
         self.bgm.set_volume(32)
         self.bgm.repeat_play()
 
@@ -58,9 +57,9 @@ class Timer():
                 self.start_time = get_time() - self.paused_time
 
         if not self.paused:
-            remaining_time = max(0, 1 - (get_time() - self.start_time))
+            remaining_time = max(0, 60 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 1 - self.paused_time)
+            remaining_time = max(0, 60 - self.paused_time)
 
         if remaining_time <= 0 and not self.time_over:
             self.time_over = True
@@ -70,7 +69,7 @@ class Timer():
     def draw(self):
         self.image.draw(self.x, self.y, 100, 100)
         if not self.paused:
-            remaining_time = max(0, 180 - (get_time() - self.start_time))
+            remaining_time = max(0, 60 - (get_time() - self.start_time))
         else:
             remaining_time = max(0, 180 - self.paused_time)
         self.font.draw(self.x + 25, self.y, f'{remaining_time:.0f}', (255, 255, 255))
@@ -102,7 +101,7 @@ def handle_events():
                         world.extend(goldspot)
                     else:
                         store.bgm.stop()
-                        map.bgm.play()
+                        map.bgm.repeat_play()
 
                         for spot in goldspot:
                             world.remove(spot)
