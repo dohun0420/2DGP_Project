@@ -12,28 +12,10 @@ from Store import Store
 from UI import UI
 from Selection import Selection
 
-class Ending():
-    def __init__(self):
-        self.x, self.y = 500, 300
-        self.image = load_image('Ending.png')
-        self.font = load_font('arial.ttf', 24)
-        self.bgm = load_music("Ending.mp3")
-        self.bgm.set_volume(32)
-        self.bgm.repeat_play()
+from pico2d import load_image, load_font, load_music
+from sdl2 import SDL_KEYDOWN, SDLK_ESCAPE
 
-    def update(self):
-        pass
 
-    def draw(self):
-        self.image.draw(self.x, self.y, 1000, 600)
-        self.font.draw(740, 260, f'{gold.count},000,000', (255, 255, 255))
-        self.font.draw(430, 40, '[Press ESC]', (0, 0, 0))
-
-    def handle_event(self, event):
-        global ending_mode, running
-        if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            ending_mode = False
-            running = False
 
 class Timer():
     def __init__(self):
@@ -57,9 +39,9 @@ class Timer():
                 self.start_time = get_time() - self.paused_time
 
         if not self.paused:
-            remaining_time = max(0, 60 - (get_time() - self.start_time))
+            remaining_time = max(0, 180 - (get_time() - self.start_time))
         else:
-            remaining_time = max(0, 60 - self.paused_time)
+            remaining_time = max(0, 180 - self.paused_time)
 
         if remaining_time <= 0 and not self.time_over:
             self.time_over = True
@@ -69,11 +51,34 @@ class Timer():
     def draw(self):
         self.image.draw(self.x, self.y, 100, 100)
         if not self.paused:
-            remaining_time = max(0, 60 - (get_time() - self.start_time))
+            remaining_time = max(0, 180 - (get_time() - self.start_time))
         else:
             remaining_time = max(0, 180 - self.paused_time)
         self.font.draw(self.x + 25, self.y, f'{remaining_time:.0f}', (255, 255, 255))
 
+
+class Ending():
+    def __init__(self):
+        self.x, self.y = 500, 300
+        self.image = load_image('Ending.png')
+        self.font = load_font('arial.ttf', 24)
+        self.bgm = load_music("Ending.mp3")
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 1000, 600)
+        self.font.draw(740, 260, f'{gold.count},000,000', (255, 255, 255))
+        self.font.draw(430, 40, '[Press ESC]', (0, 0, 0))
+
+    def handle_event(self, event):
+        global ending_mode, running
+        if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            ending_mode = False
+            running = False
 
 def handle_events():
     global running, ending_mode, player, store_mode, space_pressed_time, space_mode, selection, goldspot, map, store
@@ -89,7 +94,7 @@ def handle_events():
             if event.type == SDL_KEYDOWN:
                 if event.key == SDLK_ESCAPE:
                     running = False
-                elif event.key == SDLK_p:
+                elif event.key == SDLK_p and not space_mode:
                     store_mode = not store_mode
                     if store_mode:
                         map.bgm.stop()
@@ -116,8 +121,10 @@ def handle_events():
                     else:
                         space_pressed_time = time.time()
                         space_mode = True
+                        player.stop()
                         start_dig_animation(player.x, player.y + 40)
-                elif store_mode:
+
+            elif store_mode:
                     handle_store_key(event)
             if not store_mode and not space_mode:
                 player.handle_event(event)
